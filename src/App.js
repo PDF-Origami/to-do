@@ -94,7 +94,7 @@ class ToDo extends React.Component {
           renaming={task.renaming}
         ></Task>
       )
-      if (!task.completed) {
+      if (!task.props.completed) {
         tasks.push(task);
       } else {
         completedTasks.push(task);
@@ -131,8 +131,7 @@ class ToDo extends React.Component {
             {completedTasks}
           </div>
         </main>
-        <footer>Made by PDF_Origami
-        </footer>
+        <footer>Made by PDF_Origami</footer>
       </div>
     )
   }
