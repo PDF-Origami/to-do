@@ -1,3 +1,8 @@
+:root {
+  --blue: hsl(240, 100%, 70%);
+  --cyan: hsl(210  , 100%, 70%);
+}
+
 .App {
   text-align: center;
 }
@@ -13,26 +18,145 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.background {
+  background: linear-gradient(to right, var(--blue), var(--cyan));
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  padding: 10vh 20vw;
+  box-sizing: border-box;
+}
+
+.card {
+  flex-grow: 1;
+  min-width: 290px;
+  height: 100%;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+  padding: 25px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+}
+
+.card-header {
+  position: relative;
+  padding: 0 0 25px 10px;
+  font-size: 2rem;
+  border-radius: 10px 10px 0px 0px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.add-task-cont {
+  padding: 0 0 25px;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.add-task-input {
+  border-radius: 5px 0 0 5px;
+  font-size: 1.25rem;
+  box-shadow: none;
+  border: none;
+  background-color: hsl(210, 9%, 93%);
+  height: 40px;
+  padding: 0 10px;
+  flex: 0 1 auto;
+  width: 100%;
+}
+
+.add-task-input:focus {
+  box-shadow: 0px 0px 2px 0px var(--blue);
+}
+
+.add-task-button {
+  font-size: 1.5rem;
+  background-color: var(--blue);
+  border: none;
   color: white;
+  border-radius: 0 5px 5px 0;
+  width: 40px; height: 40px;
+  transition: all 0.2s;
+  cursor: pointer;
+  flex: 0 0 auto;
 }
 
-.App-link {
-  color: #61dafb;
+.add-task-button:hover, .add-task-button:focus {
+  background-color: var(--cyan);
+  outline: none;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.fa-plus {
+  pointer-events: none; /* Make click event work correctly */
+}
+
+.Task-container {
+  overflow: auto;
+}
+
+.has-border {
+  border-top: 1.5px solid hsl(210, 10%, 60%);
+}
+
+.Task {
+  padding: 12px 10px;
+  color: hsl(210, 10%, 25%);
+  font-weight: 500;
+  font-size: 1.25rem;
+  border-radius: 7px;
+  background: none;
+  border: none;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.Task:hover, .Task:focus {
+  background-color: hsl(210, 70%, 95%);
+  color: hsl(210, 45%, 45%);
+  outline: none;
+}
+
+.Task.completed {
+  color: hsl(210, 10%, 60%);
+}
+
+.Task span {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.Task-right-span {
+  flex: 0 0 auto;
+}
+
+.Task-right-span i {
+  transition: all 0.2s;
+  color: hsl(210, 10%, 25%);
+}
+
+.Task.completed .Task-right-span i {
+  color: hsl(210, 10%, 60%);
+}
+
+.Task.completed .Task-right-span i:hover, .Task.completed .Task-right-span i:focus {
+  color: hsl(210, 45%, 45%) !important;
+  outline: none;
+}
+
+.Task-left-span i {
+  margin-right: 20px;
+}
+
+.fa-times {
+  margin-left: 20px;
 }
