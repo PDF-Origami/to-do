@@ -21,8 +21,12 @@ class ToDo extends React.Component {
     this.toggleTask = this.toggleTask.bind(this);
     this.renameTask = this.renameTask.bind(this);
     this.toggleRenameMode = this.toggleRenameMode.bind(this);
-    this.state = {tasks: [], error: null}
-    this.taskCounter = 0; // For React keys
+
+    this.state = {
+      tasks: JSON.parse(localStorage.getItem('tasks')), 
+      taskCounter: (localStorage.getItem('taskCounter')) ? parseInt(localStorage.getItem('taskCounter')) : 0, 
+      error: null
+    }
   }
 
   addTask(name) {
@@ -30,11 +34,11 @@ class ToDo extends React.Component {
       let newToDo = {
         name: name,
         completed: false,
-        id: this.taskCounter,
+        id: this.state.taskCounter,
         renaming: false,
       };
 
-      this.taskCounter += 1;
+      this.setState({taskCounter: this.state.taskCounter + 1});
       this.setState({tasks: [...this.state.tasks, newToDo], error: null});
     } else {
       this.setState({error: 'Task name can\'t be empty.'})
@@ -79,6 +83,9 @@ class ToDo extends React.Component {
   }
 
   render() { // Populate lists, wrap them with container if they're not empty
+    localStorage.setItem('tasks', JSON.stringify(this.state.tasks));
+    localStorage.setItem('taskCounter', this.state.taskCounter);
+
     let tasks = [];
     let completedTasks = [];
 
