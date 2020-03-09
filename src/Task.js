@@ -5,8 +5,30 @@ export default class Task extends React.Component {
   componentDidMount() {
     let Task = this;
 
+    function handleRename(e) { 
+      if (Task.props.toggleRenameMode(Task.props.name)) { 
+        const input = e.target.parentElement.parentElement.querySelector('input');
+
+        input.focus();
+        input.addEventListener('blur', (e) => {
+          Task.props.renameTask(Task.props.name, input.value);
+          Task.props.toggleRenameMode(Task.props.name);
+        })
+
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            Task.props.toggleRenameMode(Task.props.name);
+            Task.props.renameTask(Task.props.name, input.value);   
+          }
+        })
+      }
+    } // toggleRenameMode returns current 'renaming' state
+
     this.elem.parentElement.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowDown' && e.target.parentElement.className === "Task-container") {
+      if (
+        e.key === 'ArrowDown' &&
+        e.target.parentElement.className === "Task-container"
+      ) {
         e.target.blur();
         e.target.children[0].focus();
       }
@@ -15,8 +37,15 @@ export default class Task extends React.Component {
     this.elem.addEventListener('click', function(e) {
       if (e.target.className === 'fas fa-times') {
         Task.props.removeTask(Task.props.name);
+
+      } else if (e.target.className === 'fas fa-pencil-alt') {
+        
+        handleRename(e); 
+
       } else {
-        Task.props.toggleTask(Task.props.name);
+        if (e.target.className !== 'rename-input') {
+          Task.props.toggleTask(Task.props.name);
+        }
       }
       
     })
@@ -69,9 +98,11 @@ export default class Task extends React.Component {
             if (e.target.className === 'fas fa-times') {
               e.target.parentElement.parentElement.parentElement.focus();
               Task.props.removeTask(Task.props.name);
+            } else if (e.target.className === 'fas fa-pencil-alt') {
+              handleRename(e);
             }
             break;
-  
+
           default:
         }
       }
@@ -84,6 +115,10 @@ export default class Task extends React.Component {
   }
 
   render() {
+    let renameField = (
+      <input type="text" defaultValue={this.props.name} spellCheck="false" className="rename-input"></input>
+    )
+
     return (
       <div 
         ref={elem => this.elem = elem}
@@ -93,7 +128,7 @@ export default class Task extends React.Component {
       >
         <span className="Task-left-span">
           <i className={this.props.completed ? "far fa-check-square" : "far fa-square"}></i>
-          <span>{this.props.name}</span>
+          {(this.props.renaming) ? renameField : <span>{this.props.name}</span>}    
           
         </span>
         <span className="Task-right-span">

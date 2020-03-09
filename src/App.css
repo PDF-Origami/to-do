@@ -194,6 +194,19 @@ main {
   margin-left: 20px;
 }
 
+.rename-input {
+  border: none;
+  font-size: 1.25rem;
+  background: none;
+  font-weight: 500;
+  font-family: inherit;
+  padding: 0;
+}
+
+.rename-input:focus {
+  outline: none;
+}
+
 footer {
   background-color: hsl(210, 9%, 93%);
   padding: 10px 0;

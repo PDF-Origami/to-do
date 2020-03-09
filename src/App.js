@@ -19,6 +19,8 @@ class ToDo extends React.Component {
     this.addTask = this.addTask.bind(this);
     this.removeTask = this.removeTask.bind(this);
     this.toggleTask = this.toggleTask.bind(this);
+    this.renameTask = this.renameTask.bind(this);
+    this.toggleRenameMode = this.toggleRenameMode.bind(this);
     this.state = {tasks: [], error: null}
     this.taskCounter = 0; // For React keys
   }
@@ -29,6 +31,7 @@ class ToDo extends React.Component {
         name: name,
         completed: false,
         id: this.taskCounter,
+        renaming: false,
       };
 
       this.taskCounter += 1;
@@ -56,6 +59,16 @@ class ToDo extends React.Component {
     }
   }
 
+  toggleRenameMode(name) {
+    let copy = [...this.state.tasks];
+    let index = copy.indexOf(copy.find(task => task.name === name));
+    if (index !== -1) {
+      copy[index].renaming = !copy[index].renaming;
+      this.setState({tasks: copy});
+      return(copy[index].renaming);
+    }
+  }
+
   renameTask(name, newName) {
     let copy = [...this.state.tasks];
     let index = copy.indexOf(copy.find(task => task.name === name));
@@ -72,8 +85,15 @@ class ToDo extends React.Component {
     for (let task of this.state.tasks) {
       if (!task.completed) {
         tasks.push(
-          <Task key={task.id} name={task.name} removeTask={this.removeTask}
-          toggleTask={this.toggleTask} completed={task.completed}></Task>
+          <Task 
+            key={task.id} name={task.name}
+            removeTask={this.removeTask}
+            renameTask={this.renameTask}
+            toggleTask={this.toggleTask}
+            toggleRenameMode={this.toggleRenameMode}
+            completed={task.completed}
+            renaming={task.renaming}
+          ></Task>
         )
       } else {
         completedTasks.push(
