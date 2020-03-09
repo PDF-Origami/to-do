@@ -25,21 +25,40 @@
   display: flex;
   align-items: center;
   justify-content: center; 
-  padding: 10vh 20vw;
   box-sizing: border-box;
+  padding: 20px;
 }
 
 .card {
+  height: 500px;
+  max-width: 750px; min-width: 290px;
   flex-grow: 1;
-  min-width: 290px;
-  height: 100%;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
-  padding: 25px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+}
+
+main {
+  padding: 25px 25px 0 25px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0px;
+}
+
+@media (max-width: 400px) {
+  main {
+    padding: 15px 15px 0 15px;
+  }
+}
+
+@media (min-width: 401px) and (max-width: 500px) {
+  main {
+    padding: 20px 20px 0 20px;
+  }
 }
 
 .card-header {
@@ -48,7 +67,17 @@
   font-size: 2rem;
   border-radius: 10px 10px 0px 0px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-title {
+  flex-shrink: 0;
+}
+
+.header-warning {
+  font-size: calc(0.5rem + 1vw);
+  color: red;
 }
 
 .add-task-cont {
@@ -129,6 +158,10 @@
   color: hsl(210, 10%, 60%);
 }
 
+.Task.completed .Task-left-span span {
+  text-decoration: line-through;
+}
+
 .Task span {
   overflow: hidden;
   display: flex;
@@ -148,7 +181,7 @@
   color: hsl(210, 10%, 60%);
 }
 
-.Task.completed .Task-right-span i:hover, .Task.completed .Task-right-span i:focus {
+.Task-right-span i:hover, .Task-right-span i:focus {
   color: hsl(210, 45%, 45%) !important;
   outline: none;
 }
@@ -157,6 +190,12 @@
   margin-right: 20px;
 }
 
-.fa-times {
+.Task-right-span i {
   margin-left: 20px;
+}
+
+footer {
+  background-color: hsl(210, 9%, 93%);
+  padding: 10px 0;
+  border-radius: 0 0 10px 10px;
 }

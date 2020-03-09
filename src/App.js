@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import Task from './Task';
+import AddTask from './AddTask'
 
 function App() {
   return (
@@ -18,20 +19,23 @@ class ToDo extends React.Component {
     this.addTask = this.addTask.bind(this);
     this.removeTask = this.removeTask.bind(this);
     this.toggleTask = this.toggleTask.bind(this);
-    this.state = {tasks: []}
-    this.toDoCounter = 0;
+    this.state = {tasks: [], error: null}
+    this.taskCounter = 0; // For React keys
   }
 
   addTask(name) {
-    let newToDo = {
-      name: name,
-      completed: false,
-      id: this.toDoCounter,
-    };
+    if (name.length > 0) {
+      let newToDo = {
+        name: name,
+        completed: false,
+        id: this.taskCounter,
+      };
 
-    this.toDoCounter += 1;
-
-    this.setState({tasks: [...this.state.tasks, newToDo]});
+      this.taskCounter += 1;
+      this.setState({tasks: [...this.state.tasks, newToDo], error: null});
+    } else {
+      this.setState({error: 'Task name can\'t be empty.'})
+    }
   }
 
   removeTask(name) {
@@ -52,7 +56,16 @@ class ToDo extends React.Component {
     }
   }
 
-  render() {
+  renameTask(name, newName) {
+    let copy = [...this.state.tasks];
+    let index = copy.indexOf(copy.find(task => task.name === name));
+    if (index !== -1) {
+      copy[index].name = newName;
+      this.setState({tasks: copy});
+    }
+  }
+
+  render() { // Populate lists, wrap them with container if they're not empty
     let tasks = [];
     let completedTasks = [];
 
@@ -79,7 +92,9 @@ class ToDo extends React.Component {
     }
     if (completedTasks.length > 0) {
       completedTasks = (
-        <div className={(!Array.isArray(tasks)) ? "has-border completed-Task-list" : "completed-Task-list"} tabIndex="0">
+        <div className={ // Only render border if both lists are present
+            (!Array.isArray(tasks)) ? "has-border completed-Task-list" : "completed-Task-list"
+            } tabIndex="0">
           {completedTasks}
         </div>
       )
@@ -87,52 +102,19 @@ class ToDo extends React.Component {
 
     return (
       <div className="ToDo card">
-        <div className="card-header">
-          To-do list
-        </div>
-        <AddTask addTask={this.addTask}></AddTask>
-        <div className="Task-container">
-          {tasks}
-          {completedTasks}
-        </div>
-      </div>
-    )
-  }
-}
-
-class AddTask extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleAddEvent = this.handleAddEvent.bind(this);
-    
-  }
-
-  handleAddEvent(e) {
-    
-    switch (e.target.tagName) {
-      case 'BUTTON':
-        this.props.addTask(e.target.previousElementSibling.value);
-        e.target.previousElementSibling.value = '';
-        break;
-
-      case 'INPUT':
-        if (e.key === 'Enter') {
-          this.props.addTask(e.target.value);
-          e.target.value = '';
-        }
-        break;
-
-      default:
-    }
-  }
-
-  render() {
-    return (
-      <div className="add-task-cont">
-        <input onKeyDown={this.handleAddEvent} placeholder="Add task" type="text" className="add-task-input"></input>
-        <button onClick={this.handleAddEvent} title="Add task (click or enter)" className="add-task-button">
-          <i className="fas fa-plus"></i>
-        </button>
+        <main>
+          <div className="card-header">
+            <span className="header-title">To-do list</span>
+            <span className="header-warning">{this.state.error}</span>
+          </div>
+          <AddTask addTask={this.addTask}></AddTask>
+          <div className="Task-container">
+            {tasks}
+            {completedTasks}
+          </div>
+        </main>
+        <footer>Made by PDF_Origami
+        </footer>
       </div>
     )
   }

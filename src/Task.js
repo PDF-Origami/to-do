@@ -5,6 +5,13 @@ export default class Task extends React.Component {
   componentDidMount() {
     let Task = this;
 
+    this.elem.parentElement.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown' && e.target.parentElement.className === "Task-container") {
+        e.target.blur();
+        e.target.children[0].focus();
+      }
+    })
+
     this.elem.addEventListener('click', function(e) {
       if (e.target.className === 'fas fa-times') {
         Task.props.removeTask(Task.props.name);
@@ -25,8 +32,8 @@ export default class Task extends React.Component {
         }
       }
       
-      if (e.target.className === 'Task') {
-        switch (e.key) {
+      if (e.target.classList.contains('Task')) {
+        switch (e.key) { // Move up or down the list, or select Task options
           case 'ArrowUp':
             focus(e.target.previousElementSibling);
             break;
@@ -38,7 +45,12 @@ export default class Task extends React.Component {
           case 'ArrowRight':
             focus(e.target.children[1].children[0]);
             break;
-  
+          
+          case 'Enter':
+            e.target.parentElement.focus();
+            Task.props.toggleTask(Task.props.name);
+            break;
+
           default:
         }
       } else { // Equiv. to "if event target is icon"
@@ -55,6 +67,7 @@ export default class Task extends React.Component {
 
           case 'Enter':
             if (e.target.className === 'fas fa-times') {
+              e.target.parentElement.parentElement.parentElement.focus();
               Task.props.removeTask(Task.props.name);
             }
             break;
@@ -72,17 +85,22 @@ export default class Task extends React.Component {
 
   render() {
     return (
-      <div ref={elem => this.elem = elem} 
-      className={this.props.completed ? "Task completed" : "Task"} tabIndex="-1">
+      <div 
+        ref={elem => this.elem = elem}
+        tabIndex="-1"
+        role="button"
+        className={this.props.completed ? "Task completed" : "Task"}
+      >
         <span className="Task-left-span">
           <i className={this.props.completed ? "far fa-check-square" : "far fa-square"}></i>
-          {this.props.name}
+          <span>{this.props.name}</span>
+          
         </span>
         <span className="Task-right-span">
-          <i title="Change order" className="fas fa-arrows-alt-v" tabIndex="-1"></i>
+          <i className="fas fa-arrows-alt-v" tabIndex="-1"></i>
+          <i className="fas fa-pencil-alt"tabIndex="-1"></i>
           <i className="fas fa-times" tabIndex="-1"></i>
         </span>
-        
       </div>
     )
   }
