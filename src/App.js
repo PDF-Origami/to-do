@@ -83,23 +83,21 @@ class ToDo extends React.Component {
     let completedTasks = [];
 
     for (let task of this.state.tasks) {
+      task = (
+        <Task 
+          key={task.id} name={task.name}
+          removeTask={this.removeTask}
+          renameTask={this.renameTask}
+          toggleTask={this.toggleTask}
+          toggleRenameMode={this.toggleRenameMode}
+          completed={task.completed}
+          renaming={task.renaming}
+        ></Task>
+      )
       if (!task.completed) {
-        tasks.push(
-          <Task 
-            key={task.id} name={task.name}
-            removeTask={this.removeTask}
-            renameTask={this.renameTask}
-            toggleTask={this.toggleTask}
-            toggleRenameMode={this.toggleRenameMode}
-            completed={task.completed}
-            renaming={task.renaming}
-          ></Task>
-        )
+        tasks.push(task);
       } else {
-        completedTasks.push(
-          <Task key={task.id} name={task.name} removeTask={this.removeTask}
-          toggleTask={this.toggleTask} completed={task.completed}></Task>
-        )
+        completedTasks.push(task);
       }
     };
 
