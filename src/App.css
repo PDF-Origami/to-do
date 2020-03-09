@@ -43,7 +43,7 @@
 }
 
 main {
-  padding: 25px 25px 0 25px;
+  padding: 25px;
   display: flex;
   flex-direction: column;
   min-height: 0px;
@@ -164,6 +164,8 @@ main {
 
 .Task span {
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   display: flex;
   align-items: center;
 }
