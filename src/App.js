@@ -21,10 +21,16 @@ class ToDo extends React.Component {
     this.toggleTask = this.toggleTask.bind(this);
     this.renameTask = this.renameTask.bind(this);
     this.toggleRenameMode = this.toggleRenameMode.bind(this);
-    console.log(localStorage.getItem('tasks'));
+
     this.state = {
-      tasks: (localStorage.getItem('tasks')) ? JSON.parse(localStorage.getItem('tasks')) : [], 
-      taskCounter: (localStorage.getItem('taskCounter')) ? parseInt(localStorage.getItem('taskCounter')) : 0, 
+      tasks: 
+        (localStorage.getItem('tasks')) ? 
+        JSON.parse(localStorage.getItem('tasks')) : [], 
+
+      taskCounter: 
+        (localStorage.getItem('taskCounter')) ? 
+        parseInt(localStorage.getItem('taskCounter')) : 0, 
+        
       error: null
     }
   }

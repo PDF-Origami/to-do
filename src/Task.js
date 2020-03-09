@@ -51,6 +51,7 @@ export default class Task extends React.Component {
     })
 
     this.elem.addEventListener('keydown', function(e) {
+      console.log(e.target);
       let focusChanged = false;
   
       function focus(elem) {
@@ -82,7 +83,7 @@ export default class Task extends React.Component {
 
           default:
         }
-      } else { // Equiv. to "if event target is icon"
+      } else if (e.target.tagName === 'I') {
         switch (e.key) {
           case 'ArrowRight':
             focus(e.target.nextElementSibling);
