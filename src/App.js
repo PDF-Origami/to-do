@@ -1,153 +1,161 @@
 import React from 'react';
 import './App.css';
 import Task from './Task';
-import AddTask from './AddTask'
+import AddTask from './AddTask';
 
 function App() {
-  return (
-    <div className="App">
-      <div className="background">
-        <ToDo></ToDo>
-      </div>
-    </div>
-  );
+	return (
+		<div className="App">
+			<div className="background">
+				<ToDo />
+			</div>
+		</div>
+	);
 }
 
 class ToDo extends React.Component {
-  constructor(props) {
-    super(props);
-    this.addTask = this.addTask.bind(this);
-    this.removeTask = this.removeTask.bind(this);
-    this.toggleTask = this.toggleTask.bind(this);
-    this.renameTask = this.renameTask.bind(this);
-    this.toggleRenameMode = this.toggleRenameMode.bind(this);
+	constructor(props) {
+		super(props);
+		this.addTask = this.addTask.bind(this);
+		this.removeTask = this.removeTask.bind(this);
+		this.toggleTask = this.toggleTask.bind(this);
+		this.renameTask = this.renameTask.bind(this);
+		this.toggleRenameMode = this.toggleRenameMode.bind(this);
 
-    this.state = {
-      tasks: 
-        (localStorage.getItem('tasks')) ? 
-        JSON.parse(localStorage.getItem('tasks')) : [], 
+		this.state = {
+			tasks: localStorage.getItem('tasks')
+				? JSON.parse(localStorage.getItem('tasks'))
+				: [],
 
-      taskCounter: 
-        (localStorage.getItem('taskCounter')) ? 
-        parseInt(localStorage.getItem('taskCounter')) : 0, 
-        
-      error: null
-    }
-  }
+			taskCounter: localStorage.getItem('taskCounter')
+				? parseInt(localStorage.getItem('taskCounter'))
+				: 0,
 
-  addTask(name) {
-    if (name.length > 0) {
-      let newToDo = {
-        name: name,
-        completed: false,
-        id: this.state.taskCounter,
-        renaming: false,
-      };
+			error: null,
+		};
+	}
 
-      this.setState({taskCounter: this.state.taskCounter + 1});
-      this.setState({tasks: [...this.state.tasks, newToDo], error: null});
-    } else {
-      this.setState({error: 'Task name can\'t be empty.'})
-    }
-  }
+	addTask(name) {
+		if (name.length > 0) {
+			const newToDo = {
+				name,
+				completed: false,
+				id: this.state.taskCounter,
+				renaming: false,
+			};
 
-  removeTask(name) {
-    let copy = [...this.state.tasks];
-    let index = copy.indexOf(copy.find(task => task.name === name));
-    if (index !== -1) {
-      copy.splice(index, 1);
-      this.setState({tasks: copy})
-    }
-  }
+			this.setState({ taskCounter: this.state.taskCounter + 1 });
+			this.setState({ tasks: [...this.state.tasks, newToDo], error: null });
+		} else {
+      this.setState({ error: 'Task name can\'t be empty.' });
+		}
+	}
 
-  toggleTask(name) {
-    let copy = [...this.state.tasks];
-    let index = copy.indexOf(copy.find(task => task.name === name));
-    if (index !== -1) {
-      copy[index].completed = !copy[index].completed;
-      this.setState({tasks: copy});
-    }
-  }
+	removeTask(name) {
+		const copy = [...this.state.tasks];
+		const index = copy.indexOf(copy.find(task => task.name === name));
+		if (index !== -1) {
+			copy.splice(index, 1);
+			this.setState({ tasks: copy });
+		}
+	}
 
-  toggleRenameMode(name) {
-    let copy = [...this.state.tasks];
-    let index = copy.indexOf(copy.find(task => task.name === name));
-    if (index !== -1) {
-      copy[index].renaming = !copy[index].renaming;
-      this.setState({tasks: copy});
-      return(copy[index].renaming);
-    }
-  }
+	toggleTask(name) {
+		const copy = [...this.state.tasks];
+		const index = copy.indexOf(copy.find(task => task.name === name));
+		if (index !== -1) {
+			copy[index].completed = !copy[index].completed;
+			this.setState({ tasks: copy });
+		}
+	}
 
-  renameTask(name, newName) {
-    let copy = [...this.state.tasks];
-    let index = copy.indexOf(copy.find(task => task.name === name));
-    if (index !== -1) {
-      copy[index].name = newName;
-      this.setState({tasks: copy});
-    }
-  }
+	toggleRenameMode(name) {
+		const copy = [...this.state.tasks];
+		const index = copy.indexOf(copy.find(task => task.name === name));
+		if (index !== -1) {
+			copy[index].renaming = !copy[index].renaming;
+			this.setState({ tasks: copy });
+			return copy[index].renaming;
+		}
+	}
 
-  render() { // Populate lists, wrap them with container if they're not empty
-    localStorage.setItem('tasks', JSON.stringify(this.state.tasks));
-    localStorage.setItem('taskCounter', this.state.taskCounter);
+	renameTask(name, newName) {
+		const copy = [...this.state.tasks];
+		let index = copy.indexOf(copy.find(task => task.name === name));
+		if (index !== -1) {
+			copy[index].name = newName;
+			this.setState({ tasks: copy });
+		}
+	}
 
-    let tasks = [];
-    let completedTasks = [];
+	render() {
+		// Populate lists, wrap them with container if they're not empty
+		localStorage.setItem('tasks', JSON.stringify(this.state.tasks));
+		localStorage.setItem('taskCounter', this.state.taskCounter);
 
-    for (let task of this.state.tasks) {
-      task = (
-        <Task 
-          key={task.id} name={task.name}
-          removeTask={this.removeTask}
-          renameTask={this.renameTask}
-          toggleTask={this.toggleTask}
-          toggleRenameMode={this.toggleRenameMode}
-          completed={task.completed}
-          renaming={task.renaming}
-        ></Task>
-      )
-      if (!task.props.completed) {
-        tasks.push(task);
-      } else {
-        completedTasks.push(task);
-      }
-    };
+		let tasks = [];
+		let completedTasks = [];
 
-    if (tasks.length > 0) {
-      tasks = (
-        <div className="Task-list" tabIndex="0">
-          {tasks}
-        </div>
-      )
-    }
-    if (completedTasks.length > 0) {
-      completedTasks = (
-        <div className={ // Only render border if both lists are present
-            (!Array.isArray(tasks)) ? "has-border completed-Task-list" : "completed-Task-list"
-            } tabIndex="0">
-          {completedTasks}
-        </div>
-      )
-    }
+		for (let task of this.state.tasks) {
+			task = (
+				<Task
+					key={task.id}
+					name={task.name}
+					removeTask={this.removeTask}
+					renameTask={this.renameTask}
+					toggleTask={this.toggleTask}
+					toggleRenameMode={this.toggleRenameMode}
+					completed={task.completed}
+					renaming={task.renaming}
+				></Task>
+			);
+			if (!task.props.completed) {
+				tasks.push(task);
+			} else {
+				completedTasks.push(task);
+			}
+		}
 
-    return (
-      <div className="ToDo card">
-        <main>
-          <div className="card-header">
-            <span className="header-title">To-do list</span>
-            <span className="header-warning">{this.state.error}</span>
-          </div>
-          <AddTask addTask={this.addTask}></AddTask>
-          <div className="Task-container">
-            {tasks}
-            {completedTasks}
-          </div>
-        </main>
-        <footer>Made by PDF_Origami</footer>
-      </div>
-    )
-  }
+		if (tasks.length > 0) {
+			tasks = (
+				<div className="Task-list" tabIndex="0">
+					{tasks}
+				</div>
+			);
+		}
+		if (completedTasks.length > 0) {
+			completedTasks = (
+				<div
+					className={
+						// Only render border if both lists are present
+						!Array.isArray(tasks)
+							? 'has-border completed-Task-list'
+							: 'completed-Task-list'
+					}
+					tabIndex="0"
+				>
+					{completedTasks}
+				</div>
+			);
+		}
+
+		return (
+			<div className="ToDo card">
+				<main>
+					<div className="card-header">
+						<span className="header-title">To-do list</span>
+						<span className="header-warning">{this.state.error}</span>
+					</div>
+					<AddTask addTask={this.addTask}></AddTask>
+					<div className="Task-container">
+						{tasks}
+						{completedTasks}
+					</div>
+				</main>
+				<footer>Made by PDF_Origami</footer>
+			</div>
+		);
+	}
 }
 
 export default App;

@@ -1,21 +1,12 @@
 :root {
   --blue: hsl(240, 100%, 70%);
   --cyan: hsl(210  , 100%, 70%);
+  --light-gray: hsl(210, 9%, 93%);
+  --completed-gray: hsl(210, 10%, 60%);
 }
 
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
 }
 
 .background {
@@ -92,7 +83,7 @@ main {
   font-size: 1.25rem;
   box-shadow: none;
   border: none;
-  background-color: hsl(210, 9%, 93%);
+  background-color: var(--light-gray);
   height: 40px;
   padding: 0 10px;
   flex: 0 1 auto;
@@ -129,7 +120,7 @@ main {
 }
 
 .has-border {
-  border-top: 1.5px solid hsl(210, 10%, 60%);
+  border-top: 1.5px solid var(--completed-gray);
 }
 
 .Task {
@@ -155,7 +146,7 @@ main {
 }
 
 .Task.completed {
-  color: hsl(210, 10%, 60%);
+  color: var(--completed-gray);
 }
 
 .Task.completed .Task-left-span span {
@@ -180,7 +171,7 @@ main {
 }
 
 .Task.completed .Task-right-span i {
-  color: hsl(210, 10%, 60%);
+  color: var(--completed-gray);
 }
 
 .Task-right-span i:hover, .Task-right-span i:focus {
@@ -210,7 +201,7 @@ main {
 }
 
 footer {
-  background-color: hsl(210, 9%, 93%);
+  background-color: var(--light-gray);
   padding: 10px 0;
   border-radius: 0 0 10px 10px;
 }
